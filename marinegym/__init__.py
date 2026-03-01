@@ -1,7 +1,10 @@
 import os
 
 import torch
-from isaacsim import SimulationApp
+try:
+    from isaacsim import SimulationApp
+except ImportError:
+    SimulationApp = None  # Isaac Sim 未安装（例如在 CI 环境中）
 from tensordict import TensorDict
 
 CONFIG_PATH = os.path.join(os.path.dirname(__file__), os.path.pardir, "cfg")

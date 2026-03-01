@@ -1,0 +1,54 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, master, "copilot/**" ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 设置 Python 3.10 环境
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+
+      - name: 升级 pip
+        run: python -m pip install --upgrade pip
+
+      - name: 安装 PyTorch（CPU 版本，用于 CI 环境）
+        run: |
+          pip install torch==2.4.0 --index-url https://download.pytorch.org/whl/cpu
+
+      - name: 安装 torchrl 和 tensordict
+        run: |
+          pip install torchrl==0.5.0 tensordict==0.5.0
+
+      - name: 安装项目依赖（不包含 Isaac Sim）
+        run: |
+          pip install hydra-core omegaconf wandb imageio plotly einops pandas moviepy av setproctitle pytest
+
+      - name: 安装 MarineGym 包
+        run: |
+          pip install -e . --no-deps
+
+      - name: 验证 Python 与依赖版本
+        run: |
+          python -c "import sys; print(f'Python 版本: {sys.version}')"
+          python -c "import torch; print(f'PyTorch 版本: {torch.__version__}')"
+          python -c "import torchrl; print(f'TorchRL 版本: {torchrl.__version__}')"
+          python -c "import tensordict; print(f'TensorDict 版本: {tensordict.__version__}')"
+          python -c "import hydra; print('hydra-core 导入成功')"
+          python -c "import omegaconf; print('omegaconf 导入成功')"
+
+      - name: 运行基础功能测试
+        run: |
+          python -m pytest tests/ -v
