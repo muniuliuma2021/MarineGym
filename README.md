@@ -61,6 +61,58 @@ If you build on this work, please cite our paper:
         }
 ```
 
+## Platform & Requirements
+
+MarineGym is **not ROS-based**. It is built directly on top of [NVIDIA Isaac Sim](https://developer.nvidia.com/isaac/sim) (an Omniverse-based robotics simulation platform) and [OmniDrones](https://github.com/btx0424/OmniDrones). No ROS installation is required.
+
+**Hardware & OS requirements:**
+
+| Requirement | Details |
+|---|---|
+| Operating System | Ubuntu 22.04 (Linux) |
+| GPU | NVIDIA RTX series (RTX 3080 or better recommended) |
+| CUDA | 12.1+ |
+| RAM | 32 GB+ |
+
+**Software requirements:**
+
+| Requirement | Version |
+|---|---|
+| [NVIDIA Isaac Sim](https://developer.nvidia.com/isaac/sim) | 4.1.0 |
+| Python | 3.10 |
+| PyTorch | 2.2.2 |
+
+## Roadmap
+
+The following environments have been verified and are ready to use:
+
+- **Hover** – stabilize the UUV at a target position
+- **Circle Tracking** – follow a circular trajectory
+- **Helical Tracking** – follow a helical trajectory
+- **Lemniscate Tracking** – follow a figure-8 trajectory
+- **Landing** – dock the UUV on a landing pad
+
+The following environments are currently **under development**:
+
+- Vision-based navigation tasks (using onboard camera)
+- Sonar-based perception tasks (using acoustic sensors)
+
+Contributions are welcome! See [Issues](https://github.com/muniuliuma2021/MarineGym/issues) for open tasks.
+
+## FAQ
+
+**Q: Does MarineGym require ROS?**
+No. MarineGym runs entirely on NVIDIA Isaac Sim and does not depend on ROS (Robot Operating System). If you need ROS integration for deployment on a real UUV, you would need to add a ROS bridge on top of the trained policy, but this is not part of MarineGym itself.
+
+**Q: What GPU do I need?**
+An NVIDIA RTX GPU is required. We recommend at least an RTX 3080 (10 GB VRAM) for comfortable training. Higher-end GPUs (e.g., RTX 4090 or A100) will significantly increase simulation throughput.
+
+**Q: Can I run MarineGym in Docker without a display?**
+Yes. The [Docker Environment](https://marinegym.netlify.app/docker_environment) guide covers headless training without a visual interface.
+
+**Q: What RL algorithms are supported?**
+MarineGym is compatible with standard RL frameworks. The example training script uses PPO. You can integrate any algorithm that works with the Gym-style API.
+
 ## Acknowledgement
 
 The architecture and certain implementation ideas build upon concepts introduced in [OmniDrones](https://github.com/btx0424/OmniDrones).
